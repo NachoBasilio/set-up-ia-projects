@@ -114,9 +114,10 @@ EOF
 run_validator() {
   local repo_dir="$1"
   local output_file="$2"
+  shift 2
 
   set +e
-  VALIDATE_SKILLS_ROOT_DIR="$repo_dir" "$VALIDATOR_SCRIPT" > "$output_file" 2>&1
+  VALIDATE_SKILLS_ROOT_DIR="$repo_dir" "$VALIDATOR_SCRIPT" "$@" > "$output_file" 2>&1
   local status=$?
   set -e
 
@@ -256,12 +257,210 @@ EOF
   rm -rf "$repo_dir"
 }
 
+test_dry_run_reports_errors_but_exits_zero() {
+  TESTS_RUN=$((TESTS_RUN + 1))
+  local repo_dir
+  repo_dir="$(mktemp -d)"
+  local output_file="$repo_dir/out.log"
+
+  create_base_repo "$repo_dir"
+  cat > "$repo_dir/Skills/skill-uno/SKILL.md" <<'EOF'
+---
+name: skill-uno
+description: falta metadata.skill_type a proposito
+license: Apache-2.0
+metadata:
+  author: qa
+  version: "1.0.0"
+  scope:
+    - root
+  auto_invoke:
+    - "run uno"
+  owner: core
+  risk_level: low
+  allowed_tools: []
+---
+
+# skill uno
+EOF
+
+  local status
+  status="$(run_validator "$repo_dir" "$output_file" --dry-run)"
+
+  assert_status "$status" 0
+  assert_contains "$output_file" 'falta metadata.skill_type'
+  assert_contains "$output_file" 'error(es)'
+
+  rm -rf "$repo_dir"
+}
+
+test_normal_mode_still_blocks_on_errors() {
+  TESTS_RUN=$((TESTS_RUN + 1))
+  local repo_dir
+  repo_dir="$(mktemp -d)"
+  local output_file="$repo_dir/out.log"
+
+  create_base_repo "$repo_dir"
+  cat > "$repo_dir/Skills/skill-uno/SKILL.md" <<'EOF'
+---
+name: skill-uno
+description: falta metadata.skill_type a proposito
+license: Apache-2.0
+metadata:
+  author: qa
+  version: "1.0.0"
+  scope:
+    - root
+  auto_invoke:
+    - "run uno"
+  owner: core
+  risk_level: low
+  allowed_tools: []
+---
+
+# skill uno
+EOF
+
+  local status
+  status="$(run_validator "$repo_dir" "$output_file")"
+
+  assert_status "$status" 1
+  assert_contains "$output_file" 'falta metadata.skill_type'
+
+  rm -rf "$repo_dir"
+}
+
+test_invalid_name_format() {
+  TESTS_RUN=$((TESTS_RUN + 1))
+  local repo_dir
+  repo_dir="$(mktemp -d)"
+  local output_file="$repo_dir/out.log"
+
+  create_base_repo "$repo_dir"
+  cat > "$repo_dir/Skills/skill-uno/SKILL.md" <<'EOF'
+---
+name: Skill_Uno_Invalido
+description: nombre con formato invalido
+license: Apache-2.0
+metadata:
+  author: qa
+  version: "1.0.0"
+  scope:
+    - root
+  auto_invoke:
+    - "run uno"
+  owner: core
+  skill_type: encoded_preference
+  risk_level: low
+  allowed_tools: []
+---
+
+# skill uno
+EOF
+
+  local status
+  status="$(run_validator "$repo_dir" "$output_file")"
+
+  assert_status "$status" 1
+  assert_contains "$output_file" 'name '\''Skill_Uno_Invalido'\'' invalido'
+
+  rm -rf "$repo_dir"
+}
+
+test_oversized_description() {
+  TESTS_RUN=$((TESTS_RUN + 1))
+  local repo_dir
+  repo_dir="$(mktemp -d)"
+  local output_file="$repo_dir/out.log"
+
+  create_base_repo "$repo_dir"
+
+  local long_description
+  long_description="$(printf 'a%.0s' $(seq 1 1030))"
+
+  cat > "$repo_dir/Skills/skill-uno/SKILL.md" <<EOF
+---
+name: skill-uno
+description: $long_description
+license: Apache-2.0
+metadata:
+  author: qa
+  version: "1.0.0"
+  scope:
+    - root
+  auto_invoke:
+    - "run uno"
+  owner: core
+  skill_type: encoded_preference
+  risk_level: low
+  allowed_tools: []
+---
+
+# skill uno
+EOF
+
+  local status
+  status="$(run_validator "$repo_dir" "$output_file")"
+
+  assert_status "$status" 1
+  assert_contains "$output_file" 'excede 1024 caracteres'
+
+  rm -rf "$repo_dir"
+}
+
+test_valid_name_and_boundary_description_pass() {
+  TESTS_RUN=$((TESTS_RUN + 1))
+  local repo_dir
+  repo_dir="$(mktemp -d)"
+  local output_file="$repo_dir/out.log"
+
+  create_base_repo "$repo_dir"
+
+  local boundary_description
+  boundary_description="$(printf 'a%.0s' $(seq 1 1024))"
+
+  cat > "$repo_dir/Skills/skill-uno/SKILL.md" <<EOF
+---
+name: skill-uno-v2
+description: $boundary_description
+license: Apache-2.0
+metadata:
+  author: qa
+  version: "1.0.0"
+  scope:
+    - root
+  auto_invoke:
+    - "run uno"
+  owner: core
+  skill_type: encoded_preference
+  risk_level: low
+  allowed_tools: []
+---
+
+# skill uno
+EOF
+
+  local status
+  status="$(run_validator "$repo_dir" "$output_file")"
+
+  assert_status "$status" 0
+  assert_not_contains "$output_file" 'invalido'
+  assert_not_contains "$output_file" 'excede 1024 caracteres'
+
+  rm -rf "$repo_dir"
+}
+
 main() {
   test_happy_path
   test_missing_frontmatter_start_delimiter
   test_missing_frontmatter_closing_delimiter
   test_body_metadata_does_not_bypass_frontmatter_validation
   test_excluded_directories_are_not_scanned
+  test_dry_run_reports_errors_but_exits_zero
+  test_normal_mode_still_blocks_on_errors
+  test_invalid_name_format
+  test_oversized_description
+  test_valid_name_and_boundary_description_pass
 
   if [[ "$TESTS_FAILED" -gt 0 ]]; then
     printf '\nResultado: %s test(s), %s fallo(s)\n' "$TESTS_RUN" "$TESTS_FAILED"

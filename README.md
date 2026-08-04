@@ -17,6 +17,7 @@ Ver [QUICKSTART.md](QUICKSTART.md) para detalles.
 - **Skills/<nombre>/SKILL.md** → Templates con dos tipos:
   - `capability_uplift`: capacidades técnicas temporales (pueden quedar obsoletas)
   - `encoded_preference`: preferencias de equipo estables (no caducan)
+  - `Skills/examples/react-vite-ts/` → ejemplos concretos para stack React + Vite + TypeScript (`scope: [example]`, para adaptar, no copiar)
 - **[MIGRACION.md](MIGRACION.md)** → Plan de migración y mantenimiento
 - **scripts/validate-skills.sh** → Validador automático de estructura y metadata
 

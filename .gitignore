@@ -14,3 +14,6 @@ build/
 *.log
 tmp/
 temp/
+
+# Gentle AI local cache (auto-regenerated, machine-specific)
+.atl/

@@ -77,12 +77,83 @@ extract_skill_type() {
   printf '%s' "$value"
 }
 
+extract_name() {
+  local frontmatter="$1"
+  printf '%s\n' "$frontmatter" | awk '
+    /^name:[[:space:]]*/ {
+      value = $0
+      sub(/^name:[[:space:]]*/, "", value)
+      gsub(/^"|"$/, "", value)
+      gsub(/^'"'"'|'"'"'$/, "", value)
+      print value
+      exit
+    }
+  '
+}
+
+extract_description() {
+  local frontmatter="$1"
+  printf '%s\n' "$frontmatter" | awk '
+    {
+      if (in_desc) {
+        if ($0 ~ /^[[:space:]]+/) {
+          line = $0
+          sub(/^[[:space:]]+/, "", line)
+          block = (block == "" ? line : block " " line)
+          next
+        } else {
+          in_desc = 0
+        }
+      }
+      if ($0 ~ /^description:[[:space:]]*[>|]/) {
+        in_desc = 1
+        next
+      }
+      if ($0 ~ /^description:[[:space:]]*/) {
+        value = $0
+        sub(/^description:[[:space:]]*/, "", value)
+        gsub(/^"|"$/, "", value)
+        gsub(/^'"'"'|'"'"'$/, "", value)
+        print value
+        found = 1
+        exit
+      }
+    }
+    END {
+      if (!found) {
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", block)
+        print block
+      }
+    }
+  '
+}
+
+check_name_format() {
+  local file="$1"
+  local name_value="$2"
+  if [[ ! "$name_value" =~ ^[a-z0-9-]{1,64}$ ]]; then
+    log_error "$file: name '$name_value' invalido, debe cumplir ^[a-z0-9-]{1,64}$ (spec oficial Agent Skills)"
+  fi
+}
+
+check_description_content() {
+  local file="$1"
+  local desc_value="$2"
+  if [[ -z "$desc_value" ]]; then
+    log_error "$file: description vacia"
+  elif [[ "${#desc_value}" -gt 1024 ]]; then
+    log_error "$file: description excede 1024 caracteres (spec oficial Agent Skills)"
+  fi
+}
+
 find_modern_skills() {
   if [[ ! -d "$ROOT_DIR/Skills" ]]; then
     return
   fi
 
-  find "$ROOT_DIR/Skills" -mindepth 2 -maxdepth 2 -type f -name 'SKILL.md' | sort
+  # mindepth 2 (sin maxdepth) para cubrir tanto Skills/<nombre>/SKILL.md
+  # como skills anidadas de ejemplo, p.ej. Skills/examples/<stack>/<nombre>/SKILL.md
+  find "$ROOT_DIR/Skills" -mindepth 2 -type f -name 'SKILL.md' | sort
 }
 
 find_legacy_skills() {
@@ -95,7 +166,7 @@ find_legacy_skills() {
 
 find_markdown_docs() {
   find "$ROOT_DIR" \
-    \( -type d \( -name .git -o -name node_modules -o -name vendor -o -name dist -o -name build \) -prune \) -o \
+    \( -type d \( -name .git -o -name node_modules -o -name vendor -o -name dist -o -name build -o -name .atl \) -prune \) -o \
     \( -type f -name '*.md' -print \) | sort
 }
 
@@ -124,8 +195,10 @@ check_modern_skills() {
       continue
     fi
 
-    has_field_in_frontmatter "$frontmatter" '^name:[[:space:]]+' || log_error "$file: falta name"
-    has_field_in_frontmatter "$frontmatter" '^description:[[:space:]]*' || log_error "$file: falta description"
+    local has_name=1
+    local has_description=1
+    has_field_in_frontmatter "$frontmatter" '^name:[[:space:]]+' || { log_error "$file: falta name"; has_name=0; }
+    has_field_in_frontmatter "$frontmatter" '^description:[[:space:]]*' || { log_error "$file: falta description"; has_description=0; }
     has_field_in_frontmatter "$frontmatter" '^license:[[:space:]]+' || log_error "$file: falta license"
     has_field_in_frontmatter "$frontmatter" '^[[:space:]]*author:[[:space:]]+' || log_error "$file: falta metadata.author"
     has_field_in_frontmatter "$frontmatter" '^[[:space:]]*version:[[:space:]]+' || log_error "$file: falta metadata.version"
@@ -135,6 +208,13 @@ check_modern_skills() {
     has_field_in_frontmatter "$frontmatter" '^[[:space:]]*risk_level:[[:space:]]+' || log_error "$file: falta metadata.risk_level"
     has_field_in_frontmatter "$frontmatter" '^[[:space:]]*allowed_tools:[[:space:]]*' || log_error "$file: falta metadata.allowed_tools"
     has_field_in_frontmatter "$frontmatter" '^[[:space:]]*skill_type:[[:space:]]+' || log_error "$file: falta metadata.skill_type"
+
+    if [[ "$has_name" -eq 1 ]]; then
+      check_name_format "$file" "$(extract_name "$frontmatter")"
+    fi
+    if [[ "$has_description" -eq 1 ]]; then
+      check_description_content "$file" "$(extract_description "$frontmatter")"
+    fi
 
     local skill_type
     skill_type="$(extract_skill_type "$frontmatter")"
@@ -223,6 +303,11 @@ main() {
 
   printf '\n'
   printf 'Resumen: %s error(es), %s warning(s)\n' "$errors" "$warnings"
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    log_info "Dry-run: solo auditoria, no bloquea (exit 0)"
+    exit 0
+  fi
 
   if [[ "$errors" -gt 0 ]]; then
     exit 1

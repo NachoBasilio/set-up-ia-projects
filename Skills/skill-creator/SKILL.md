@@ -68,6 +68,8 @@ metadata:
 ---
 ```
 
+Restricciones de `name`/`description` y presupuesto de tokens del cuerpo: ver `START-UP.md` (FASE 3).
+
 ## Tipos de skill (obligatorio)
 
 - `capability_uplift`: agrega capacidad tecnica temporal; puede caducar cuando el modelo mejora.

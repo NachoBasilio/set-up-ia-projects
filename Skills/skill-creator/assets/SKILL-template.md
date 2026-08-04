@@ -19,6 +19,8 @@ metadata:
   allowed_tools: []
 ---
 
+<!-- Restricciones de name/description y presupuesto de tokens: ver START-UP.md (FASE 3) -->
+
 # <skill-name>
 
 ## Cuando usar

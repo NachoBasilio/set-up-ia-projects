@@ -115,6 +115,10 @@ metadata:
 ---
 ```
 
+`name` debe cumplir `^[a-z0-9-]{1,64}$` y `description` debe ser no vacía y ≤1024 caracteres (spec oficial Agent Skills de Anthropic).
+
+El cuerpo de `SKILL.md` (sin frontmatter) debería mantenerse bajo ~5k tokens; lo que pese más va a `references/`, `scripts/` o `assets/` (progressive disclosure).
+
 ### Taxonomía OBLIGATORIA
 
 **capability_uplift**:
@@ -148,6 +152,8 @@ metadata:
 - Sincronizar metadata después de crear/modificar
 - Auto-generar tablas en `AGENTS.md`
 - Mantener coherencia entre docs
+
+Si el análisis detecta un proyecto React + Vite + TypeScript, usar `Skills/examples/react-vite-ts/` (`scope: [example]`) como punto de partida a adaptar, no a copiar verbatim.
 
 ### Compatibilidad legacy
 - `Skills/*.md` solo como redirect temporal

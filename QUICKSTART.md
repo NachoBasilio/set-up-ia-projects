@@ -54,6 +54,8 @@ skill_type: encoded_preference
 
 **Regla**: si es `capability_uplift`, SIEMPRE incluir `review_by`.
 
+Proyecto React + Vite + TypeScript: partir de `Skills/examples/react-vite-ts/` (`scope: [example]`) y adaptar, no copiar verbatim.
+
 ## 4. Validar setup
 
 ```bash
