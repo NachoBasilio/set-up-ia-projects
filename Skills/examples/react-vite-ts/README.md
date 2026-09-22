@@ -1,6 +1,6 @@
 # Ejemplos: React + Vite + TypeScript
 
-Skills anonimizadas y generalizadas, destiladas de proyectos productivos reales (React + Vite + TypeScript, arquitectura `core/features/app`). Usalas como punto de partida cuando FASE 3 de `START-UP.md` (Analisis obligatorio) detecta un proyecto frontend con este stack.
+Skills anonimizadas y generalizadas, destiladas de proyectos productivos reales (React + Vite + TypeScript, arquitectura `core/features/app`). Usalas como punto de partida cuando FASE 2 de `START-UP.md` (Analisis obligatorio) detecta un proyecto frontend con este stack.
 
 `metadata.scope: [example]` las marca como plantillas, no como skills activas de este repo (`scope: [root]`).
 

@@ -36,12 +36,12 @@ Convertir cada tarea en un flujo observable y acotado. Esta skill es un controla
 ## Control de ejecución
 
 1. **DISCOVER:** ejecutar el preflight de [`docs/repository-targeting.md`](../../docs/repository-targeting.md), resolver el repositorio objetivo y seleccionar skills por nombre + `description`.
-2. **RETRIEVE:** leer [`docs/programmatic-workflow.md`](../../docs/programmatic-workflow.md) y [`docs/deterministic-adapters.md`](../../docs/deterministic-adapters.md); ejecutar `scripts/search_docs` si existe y aplica. Si falta, declarar `blocked` y no inventar contexto.
+2. **RETRIEVE:** leer [`docs/programmatic-workflow.md`](../../docs/programmatic-workflow.md) y [`docs/deterministic-adapters.md`](../../docs/deterministic-adapters.md); ejecutar `scripts/adapters/search_docs.sh` o el adaptador real declarado por el proyecto si existe y aplica. Si falta, declarar `blocked` y no inventar contexto.
 3. **PLAN:** separar hechos recuperados, supuestos a validar, cambios y criterios de aceptación.
 4. **GENERATE:** razonar y generar adaptado al stack real. No asumir React, Node, Shopify ni proveedor alguno.
-5. **VALIDATE:** ejecutar `scripts/validate` o el validador real declarado por el proyecto antes de presentar o entregar cualquier resultado.
+5. **VALIDATE:** ejecutar `scripts/adapters/validate.sh` o el adaptador real declarado por el proyecto antes de presentar o entregar cualquier resultado.
 6. **REPAIR:** corregir únicamente errores estructurados y repetir validación como máximo 3 veces, salvo límite explícito del proyecto. Detenerse ante bloqueo o error no reparable.
-7. **VERIFY:** ejecutar `scripts/verify` de forma final e independiente, revisar diff y reportar evidencia, limitaciones y archivos cambiados.
+7. **VERIFY:** ejecutar `scripts/adapters/verify.sh` o el adaptador real declarado por el proyecto de forma final e independiente, revisar diff y reportar evidencia, limitaciones y archivos cambiados.
 
 ## No invención
 

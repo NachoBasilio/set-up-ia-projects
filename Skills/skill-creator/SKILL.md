@@ -68,7 +68,7 @@ metadata:
 ---
 ```
 
-Restricciones de `name`/`description` y presupuesto de tokens del cuerpo: ver `START-UP.md` (FASE 3).
+Restricciones de `name`/`description` y presupuesto de tokens del cuerpo: ver `START-UP.md` (FASE 4).
 
 ## Tipos de skill (obligatorio)
 

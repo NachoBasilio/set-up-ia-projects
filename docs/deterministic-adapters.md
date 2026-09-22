@@ -45,3 +45,7 @@ Comprueba el candidato contra contratos objetivos: parseo, schema, formato, lint
 Comprueba el resultado final de forma independiente: ejecuta checks de aceptación, revisa el diff y confirma que las fuentes y limitaciones están declaradas. Debe evitar confiar únicamente en una marca producida por `validate` o por el LLM.
 
 Un stack puede implementar estos contratos con shell, Python, Go, un runner CI u otra tecnología. Elegir según el repositorio; no prescribir React, Node, Shopify ni otro proveedor.
+
+## Implementaciones de referencia
+
+`scripts/adapters/search_docs.sh`, `scripts/adapters/validate.sh` y `scripts/adapters/verify.sh` son ejemplos mínimos para ESTE repo: buscan sobre Markdown con `rg`, validan metadata de skills más links relativos, y verifican con evidencia de `git`. `verify` reporta `blocked` cuando no puede recolectar esa evidencia (no es un work tree, ownership dudoso, etc.), distinguiéndolo de un árbol limpio real vía `metadata.git_evidence`. Cada proyecto que adopte este framework debe reemplazarlos por sus adaptadores reales (su propio linter, schema, API o `git`). Lo obligatorio es el contrato descrito arriba, no este script.

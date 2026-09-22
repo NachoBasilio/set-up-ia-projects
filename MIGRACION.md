@@ -23,13 +23,7 @@ Migrar y mantener `AGENTS.md` y `Skills/*/SKILL.md` alineados con:
 
 ## Taxonomía de skills
 
-**capability_uplift**:
-- Capacidad técnica temporal → `review_by` obligatorio
-- Planificar retiro (`sunset_at`) cuando el modelo ya cubra esa capacidad
-
-**encoded_preference**:  
-- Preferencias estables de equipo/producto → NO caduca por mejoras del modelo
-- Solo cambia si cambia decisión de negocio/equipo
+Definición completa (`capability_uplift` vs `encoded_preference`) y reglas de ciclo de vida: ver `START-UP.md` (FASE 4).
 
 ## Plan ejecutable
 
@@ -64,7 +58,7 @@ Completar en todas las skills:
 
 - Actualizar `AGENTS.md` con fuente de verdad  
 - Mantener `README.md` actualizado
-- `START-UP.md` como protocolo canónico
+- `START-UP.md` como protocolo de configuración
 
 **Target**: sin contradicciones entre docs
 
@@ -89,11 +83,7 @@ Completar en todas las skills:
 
 ## Comandos útiles
 
-**Validación**:
-```bash
-./scripts/validate-skills.sh --dry-run  # Solo auditoría
-./scripts/validate-skills.sh            # Validación completa
-```
+**Validación**: `scripts/validate-skills.sh` es el validador de metadata de skills (estructura y frontmatter), distinto de la etapa VALIDATE por tarea del flujo programático. Ver [QUICKSTART.md](QUICKSTART.md) sección "4. Validar setup".
 
 **Inventario rápido**:
 ```bash

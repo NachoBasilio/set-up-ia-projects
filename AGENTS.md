@@ -10,8 +10,9 @@ Evitar ruido: este archivo define solo reglas operativas no obvias.
 
 1. Solicitud explicita del usuario.
 2. Este `AGENTS.md` (reglas minimas y verificables).
-3. `README.md` (vision y flujo general).
-4. `START-UP.md`, `MIGRACION.md` y `Skills/*/SKILL.md` (proceso detallado y referencias).
+3. [`docs/repository-targeting.md`](docs/repository-targeting.md), [`docs/programmatic-workflow.md`](docs/programmatic-workflow.md) y [`docs/deterministic-adapters.md`](docs/deterministic-adapters.md) (gates obligatorios antes de leer, cambiar o entregar).
+4. `README.md` (vision y flujo general).
+5. `START-UP.md`, `MIGRACION.md` y `Skills/*/SKILL.md` (proceso detallado y referencias).
 
 Si dos fuentes se contradicen, gana la de mayor precedencia.
 
