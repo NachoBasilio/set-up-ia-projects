@@ -16,3 +16,6 @@ jobs:
 
       - name: Run validator test suite
         run: ./tests/validate-skills.test.sh
+
+      - name: Run adapters test suite
+        run: ./tests/adapters.test.sh
