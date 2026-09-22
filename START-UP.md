@@ -44,6 +44,40 @@ Después del preflight, selecciona la skill por nombre y `description`, carga su
 
 No confundas el formato abierto de Agent Skills con las reglas adicionales de este framework: consulta [`docs/agent-skills-guide.md`](docs/agent-skills-guide.md). Los adaptadores son específicos del proyecto; si faltan, declara la limitación.
 
+### Controlador y adaptadores deterministas
+
+La skill no es una enciclopedia para que el modelo recuerde más cosas. Es un controlador que obliga a seguir un procedimiento verificable:
+
+```text
+PROMPT DEL USUARIO
+       ↓
+descubrimiento de skill (name + description)
+       ↓
+SKILL.md como controlador
+       ↓
+search_docs / retrieval determinista
+       ↓
+plan y generación del LLM
+       ↓
+validate determinista
+       ↓
+repair loop acotado (máximo N intentos)
+       ↓
+verify independiente
+       ↓
+respuesta con evidencia, limitaciones y telemetría/evals
+```
+
+Aplicá estas reglas desde el inicio de cada tarea:
+
+1. **RETRIEVE antes de GENERATE**: buscá documentación, código, configuración, schemas y comandos reales antes de generar cuando la tarea dependa de ellos.
+2. **VALIDATE antes de entregar**: ejecutá el lint, parser, schema, typecheck, test o validador que el proyecto realmente provea.
+3. **REPAIR solo con evidencia**: corregí el error estructurado observado, registrá el intento `n/N` y no reintentes indefinidamente. El límite recomendado es `N = 3`.
+4. **VERIFY de forma independiente**: revisá requisitos, diff, paths y criterios de aceptación sin confiar únicamente en la marca del LLM o de `validate`.
+5. **No inventes**: si no existe `search_docs`, `validate` o `verify`, declaralo como `blocked` o limitación del proyecto; no reemplaces evidencia faltante con memoria del modelo.
+
+El LLM interpreta la intención, adapta el plan y razona sobre el caso concreto. El código determinista recupera contexto y comprueba hechos objetivos. Los scripts `search_docs`, `validate` y `verify` son adaptadores definidos por cada proyecto; no son implementaciones universales del estándar Agent Skills. Consultá [`docs/deterministic-adapters.md`](docs/deterministic-adapters.md) para sus contratos y [`docs/evals-and-telemetry.md`](docs/evals-and-telemetry.md) para medir si la skill realmente mejora los resultados.
+
 ## FASE 2: Análisis obligatorio
 
 ### Preguntas iniciales (OBLIGATORIO)
