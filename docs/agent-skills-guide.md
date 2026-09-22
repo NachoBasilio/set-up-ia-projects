@@ -12,21 +12,9 @@ El formato no define hooks de Shopify, telemetría, MCP, un proveedor concreto n
 
 ### Arquitectura operativa de este framework
 
-Inspirada en el patrón programático de Shopify descrito en la investigación suministrada, la skill funciona como un controlador:
+Inspirada en el patrón programático de Shopify descrito en la investigación suministrada, la skill funciona como un controlador que ejecuta el contrato de siete etapas `DISCOVER → RETRIEVE → PLAN → GENERATE → VALIDATE → REPAIR → VERIFY` de [`programmatic-workflow.md`](programmatic-workflow.md).
 
-```text
-USER PROMPT
-  → descubrimiento de skills (nombre + descripción)
-  → SKILL.md controlador
-  → recuperación/búsqueda determinista
-  → razonamiento/generación del LLM
-  → validación determinista
-  → reparación acotada
-  → verificación final
-  → respuesta, telemetría y evals
-```
-
-El contrato completo está en [`programmatic-workflow.md`](programmatic-workflow.md). El preflight de identidad del repositorio está en [`repository-targeting.md`](repository-targeting.md) y ocurre antes de leer o cambiar archivos.
+El preflight de identidad del repositorio está en [`repository-targeting.md`](repository-targeting.md) y ocurre antes de leer o cambiar archivos.
 
 ## Responsabilidades
 

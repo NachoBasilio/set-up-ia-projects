@@ -2,6 +2,8 @@
 
 Este es el contrato canónico de ejecución. Una tarea no entrega un artefacto generado sin pasar por las etapas aplicables y sus criterios de parada.
 
+Es el **contrato de ejecución** por tarea: se aplica dentro de cada tarea, no en el setup del proyecto. `START-UP.md` es el protocolo de configuración de una sola vez por proyecto y lo invoca cuando corresponde.
+
 ## Flujo rápido
 
 ```text

@@ -16,22 +16,19 @@ Ver [QUICKSTART.md](QUICKSTART.md) para detalles.
 
 - **[START-UP.md](START-UP.md)** → Protocolo completo por fases para configurar cualquier proyecto
 - **[AGENTS.md](AGENTS.md)** → Reglas mínimas y verificables para agentes (anti-ruido)
-- **Skills/<nombre>/SKILL.md** → Templates con dos tipos:
-  - `capability_uplift`: capacidades técnicas temporales (pueden quedar obsoletas)
-  - `encoded_preference`: preferencias de equipo estables (no caducan)
+- **Skills/<nombre>/SKILL.md** → Templates con dos tipos. Definición completa y reglas de ciclo de vida: `START-UP.md` (FASE 4).
+  - `capability_uplift`: capacidad técnica temporal.
+  - `encoded_preference`: preferencia de equipo estable.
   - `Skills/examples/react-vite-ts/` → ejemplos concretos para stack React + Vite + TypeScript (`scope: [example]`, para adaptar, no copiar)
 - **[MIGRACION.md](MIGRACION.md)** → Plan de migración y mantenimiento
 - **[docs/repository-targeting.md](docs/repository-targeting.md)** → Protocolo canónico para identificar el repositorio correcto antes de cualquier cambio
 - **[docs/agent-skills-guide.md](docs/agent-skills-guide.md)** → Diferencia entre el formato Agent Skills y este controlador operativo
 - **[docs/programmatic-workflow.md](docs/programmatic-workflow.md)** → Contrato de siete etapas
+- **[docs/deterministic-adapters.md](docs/deterministic-adapters.md)** → Contratos de los adaptadores deterministas (`search_docs`, `validate`, `verify`)
+- **[docs/evals-and-telemetry.md](docs/evals-and-telemetry.md)** → Cómo medir si una skill mejora resultados reales
 - **[Skills/programmatic-workflow/SKILL.md](Skills/programmatic-workflow/SKILL.md)** → Skill reusable para aplicar el flujo
-- **scripts/validate-skills.sh** → Validador automático de estructura y metadata
-
-## ¿Por qué dos tipos de skills?
-
-**capability_uplift**: Agregan algo técnico que el modelo no sabe hacer todavía. Van a quedar obsoletas cuando GPT-5/Claude-Next las hagan nativas. Ejemplo: "parsear logs de Kubernetes" → eventualmente los modelos van a hacer esto out-of-the-box.
-
-**encoded_preference**: TUS reglas de trabajo. Cómo nombrás variables, qué patterns usás, estructura de commits. Estas NO caducan porque son tuyas, no del modelo.
+- **scripts/validate-skills.sh** → Validador de metadata de skills (estructura y frontmatter); distinto de la etapa VALIDATE por tarea del flujo programático
+- **scripts/adapters/** → Implementaciones de referencia de los adaptadores deterministas de este repo
 
 ## Regla fundamental
 

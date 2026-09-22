@@ -19,9 +19,22 @@ metadata:
   allowed_tools: []
 ---
 
-<!-- Restricciones de name/description y presupuesto de tokens: ver START-UP.md (FASE 3) -->
+<!-- Restricciones de name/description y presupuesto de tokens: ver START-UP.md (FASE 4) -->
 
 # <skill-name>
+
+## Controlador
+
+Aplicar `docs/programmatic-workflow.md` y el preflight de `docs/repository-targeting.md`
+antes de leer o modificar el repositorio.
+
+1. **DISCOVER:** resolver repositorio, alcance y skill aplicable.
+2. **RETRIEVE:** ejecutar `scripts/adapters/search_docs.sh` o el adaptador real declarado por el proyecto antes de generar cuando la tarea dependa de contexto externo o del proyecto. Si no existe adaptador, declarar el bloqueo.
+3. **PLAN:** separar hechos, supuestos verificables, cambios y aceptación.
+4. **GENERATE:** adaptar al stack real; no inventar APIs, schemas, comandos ni archivos.
+5. **VALIDATE:** ejecutar `scripts/adapters/validate.sh` o el adaptador real declarado por el proyecto antes de mostrar o entregar el resultado.
+6. **REPAIR:** corregir solo errores observables, con un máximo de 3 intentos salvo que el proyecto defina otro `N`.
+7. **VERIFY:** ejecutar `scripts/adapters/verify.sh` o el adaptador real declarado por el proyecto de forma final e independiente y revisar evidencia.
 
 ## Cuando usar
 

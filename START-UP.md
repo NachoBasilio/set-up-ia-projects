@@ -1,5 +1,7 @@
 # START-UP: Protocolo para agentes
 
+Este es el **protocolo de configuración** (setup): se ejecuta una sola vez por proyecto, para inicializar o actualizar `AGENTS.md` y `Skills/`. No es el contrato de ejecución por tarea (ese vive en [`docs/programmatic-workflow.md`](docs/programmatic-workflow.md)).
+
 Usa este protocolo antes de configurar `AGENTS.md` y `Skills/` en cualquier proyecto.
 
 ## Objetivo
@@ -42,31 +44,13 @@ Si hay más de un repositorio/worktree plausible, el destino no está claro, `or
 
 Después del preflight, selecciona la skill por nombre y `description`, carga su `SKILL.md` controlador y confirma si la tarea requiere el [flujo programático](docs/programmatic-workflow.md). Para cambios o generación, el orden obligatorio es `DISCOVER → RETRIEVE → PLAN → GENERATE → VALIDATE → REPAIR → VERIFY`. La skill [`Skills/programmatic-workflow/SKILL.md`](Skills/programmatic-workflow/SKILL.md) lo aplica de forma reusable.
 
+Este contrato de siete etapas se ejecuta DENTRO de cada tarea: es el contrato de ejecución de [`docs/programmatic-workflow.md`](docs/programmatic-workflow.md), no una fase de este protocolo de configuración (que corre una sola vez por proyecto).
+
 No confundas el formato abierto de Agent Skills con las reglas adicionales de este framework: consulta [`docs/agent-skills-guide.md`](docs/agent-skills-guide.md). Los adaptadores son específicos del proyecto; si faltan, declara la limitación.
 
 ### Controlador y adaptadores deterministas
 
-La skill no es una enciclopedia para que el modelo recuerde más cosas. Es un controlador que obliga a seguir un procedimiento verificable:
-
-```text
-PROMPT DEL USUARIO
-       ↓
-descubrimiento de skill (name + description)
-       ↓
-SKILL.md como controlador
-       ↓
-search_docs / retrieval determinista
-       ↓
-plan y generación del LLM
-       ↓
-validate determinista
-       ↓
-repair loop acotado (máximo N intentos)
-       ↓
-verify independiente
-       ↓
-respuesta con evidencia, limitaciones y telemetría/evals
-```
+La skill no es una enciclopedia para que el modelo recuerde más cosas: es un controlador que obliga a seguir el procedimiento verificable de siete etapas `DISCOVER → RETRIEVE → PLAN → GENERATE → VALIDATE → REPAIR → VERIFY` definido en [`docs/programmatic-workflow.md`](docs/programmatic-workflow.md).
 
 Aplicá estas reglas desde el inicio de cada tarea:
 
@@ -161,7 +145,7 @@ metadata:
 ---
 ```
 
-`name` debe cumplir `^[a-z0-9-]{1,64}$` y `description` debe ser no vacía y ≤1024 caracteres (spec oficial Agent Skills de Anthropic).
+`name` debe cumplir `^[a-z0-9-]{1,64}$` y `description` debe ser no vacía y ≤1024 caracteres (spec oficial Agent Skills de Anthropic). Los demás campos (`license`, `metadata.*`) son extensiones de este framework, exigidas por `scripts/validate-skills.sh`, y no forman parte del estándar Agent Skills upstream.
 
 El cuerpo de `SKILL.md` (sin frontmatter) debería mantenerse bajo ~5k tokens; lo que pese más va a `references/`, `scripts/` o `assets/` (progressive disclosure).
 
@@ -209,10 +193,11 @@ Si el análisis detecta un proyecto React + Vite + TypeScript, usar `Skills/exam
 
 ## FASE 5: Verificación
 
-Auditar coherencia entre:
-- AGENTS.md ↔ skills ↔ configuración real ↔ comportamiento del código
+Auditar coherencia con un procedimiento concreto:
 
-**Si hay conflicto**: corregir inmediatamente (NO dejar documentación mentirosa)
+1. Ejecutar `./scripts/adapters/verify.sh` (metadata de skills + links relativos).
+2. Con `rg`, buscar el `name` de cada skill en `AGENTS.md` y confirmar que toda skill referenciada ahí existe en disco, y que toda skill en disco está referenciada en `AGENTS.md`.
+3. El chequeo semántico "código real vs reglas" es juicio humano explícito, no automatizable: listar las discrepancias encontradas y preguntar al usuario antes de cambiar reglas.
 
 ## FASE 6: Validación técnica
 
@@ -220,7 +205,7 @@ Auditar coherencia entre:
 - Lint (ruff, golangci-lint, eslint, flake8, etc.)
 - Typecheck/build según stack
 
-**Regla dura**: antes de commitear, correr validadores del stack activo. Si no existe linter, definir uno antes de continuar.
+**Regla dura**: antes de commitear, correr validadores del stack activo. Si no existe linter, detenerse y preguntar al usuario: proponer el linter estándar del stack detectado (ej. ESLint para TS/JS, ruff para Python, golangci-lint para Go) y no instalarlo ni configurarlo sin confirmación explícita.
 
 ## Entrega esperada
 

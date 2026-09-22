@@ -48,23 +48,9 @@ Arquitectura: [capas, hexagonal, etc.]
 Mantener reglas verificables y anti-ruido. No inventar comandos.
 ```
 
-## 3. Skills con taxonomía correcta
+## 3. Taxonomía de skills
 
-Toda skill nueva debe declarar:
-
-**Temporal** (`capability_uplift`):
-```yaml
-skill_type: capability_uplift
-review_by: "2026-06-01"  # OBLIGATORIO
-```
-
-**Estable** (`encoded_preference`):
-```yaml  
-skill_type: encoded_preference
-# review_by opcional
-```
-
-**Regla**: si es `capability_uplift`, SIEMPRE incluir `review_by`.
+Toda skill nueva debe declarar `skill_type`: `capability_uplift` (temporal) o `encoded_preference` (estable). Definición completa y regla de `review_by`: ver `START-UP.md` (FASE 4).
 
 Proyecto React + Vite + TypeScript: partir de `Skills/examples/react-vite-ts/` (`scope: [example]`) y adaptar, no copiar verbatim.
 
@@ -75,6 +61,8 @@ Proyecto React + Vite + TypeScript: partir de `Skills/examples/react-vite-ts/` (
 ./scripts/validate-skills.sh --dry-run  # Solo auditoría
 ./scripts/validate-skills.sh            # Validación completa
 ```
+
+`validate-skills.sh` es el validador de metadata de skills (estructura y frontmatter): corre una sola vez sobre el setup, y es distinto de la etapa `VALIDATE` del flujo programático por tarea ([`docs/programmatic-workflow.md`](docs/programmatic-workflow.md)), que valida cada artefacto generado.
 
 **Interpretación**:
 - ✅ `0`: setup correcto
@@ -119,4 +107,7 @@ Stack: Python + pytest + ruff + mypy
 - [MIGRACION.md](MIGRACION.md) - Plan de evolución y mantenimiento
 - [docs/agent-skills-guide.md](docs/agent-skills-guide.md) - Formato Agent Skills y arquitectura operativa
 - [docs/programmatic-workflow.md](docs/programmatic-workflow.md) - Contrato canónico de siete etapas
+- [docs/deterministic-adapters.md](docs/deterministic-adapters.md) - Contratos de los adaptadores deterministas
+- [docs/evals-and-telemetry.md](docs/evals-and-telemetry.md) - Cómo medir si una skill mejora resultados reales
 - [docs/repository-targeting.md](docs/repository-targeting.md) - Preflight de identidad del repositorio
+- `scripts/adapters/` - Implementaciones de referencia de `search_docs`, `validate` y `verify`
