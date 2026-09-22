@@ -32,7 +32,19 @@ SÍ agregar:
 
 **Excepción**: si el repo tiene documentación pobre, ampliar `AGENTS.md` solo con lo mínimo para setup/tests.
 
-## FASE 1: Análisis obligatorio
+## FASE 0: Preflight de repositorio (OBLIGATORIO)
+
+Antes de cualquier lectura, escritura o mutación, aplica [`docs/repository-targeting.md`](docs/repository-targeting.md). Confirma la raíz canónica, `pwd`, estado, remote, rama y documentación cercana. Clasifica el trabajo como cambio del framework reusable o cambio específico de una aplicación.
+
+Si hay más de un repositorio/worktree plausible, el destino no está claro, `origin` no coincide o falta evidencia, **detente y pregunta**. Este es el contrato operativo de seguridad de este framework; no se presenta como una regla del estándar Agent Skills.
+
+## FASE 1: Selección de workflow y descubrimiento de skills
+
+Después del preflight, selecciona la skill por nombre y `description`, carga su `SKILL.md` controlador y confirma si la tarea requiere el [flujo programático](docs/programmatic-workflow.md). Para cambios o generación, el orden obligatorio es `DISCOVER → RETRIEVE → PLAN → GENERATE → VALIDATE → REPAIR → VERIFY`. La skill [`Skills/programmatic-workflow/SKILL.md`](Skills/programmatic-workflow/SKILL.md) lo aplica de forma reusable.
+
+No confundas el formato abierto de Agent Skills con las reglas adicionales de este framework: consulta [`docs/agent-skills-guide.md`](docs/agent-skills-guide.md). Los adaptadores son específicos del proyecto; si faltan, declara la limitación.
+
+## FASE 2: Análisis obligatorio
 
 ### Preguntas iniciales (OBLIGATORIO)
 
@@ -57,7 +69,7 @@ Si no está claro:
 - Reglas verificables
 - Lista de skills necesarias
 
-## FASE 2: Diseño de AGENTS.md
+## FASE 3: Diseño de AGENTS.md
 
 ### Estructura jerárquica
 - `AGENTS.md` raíz (reglas globales + tabla skills + auto-invocación)
@@ -82,7 +94,7 @@ Si no está claro:
 - [ ] Sin listas extensas de herramientas sin condición de uso
 - [ ] Precedencia definida para resolver contradicciones
 
-## FASE 3: Diseño de skills
+## FASE 4: Diseño de skills
 
 ### Ubicación obligatoria
 `Skills/<nombre>/SKILL.md` con frontmatter + trigger + reglas + checklist + comandos
@@ -161,14 +173,14 @@ Si el análisis detecta un proyecto React + Vite + TypeScript, usar `Skills/exam
 - Si existen ambas versiones: nueva = fuente de verdad
 - Casing correcto: `Skills/` (S mayúscula)
 
-## FASE 4: Verificación
+## FASE 5: Verificación
 
 Auditar coherencia entre:
 - AGENTS.md ↔ skills ↔ configuración real ↔ comportamiento del código
 
 **Si hay conflicto**: corregir inmediatamente (NO dejar documentación mentirosa)
 
-## FASE 5: Validación técnica
+## FASE 6: Validación técnica
 
 **Mínimo obligatorio**:
 - Lint (ruff, golangci-lint, eslint, flake8, etc.)

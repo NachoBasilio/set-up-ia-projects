@@ -4,6 +4,8 @@ Framework para que agentes trabajen en tu proyecto sin romper todo. La IA entien
 
 ## Quickstart (5 minutos)
 
+Antes de elegir setup o skill, aplica el [preflight de repositorio](docs/repository-targeting.md). Después sigue el [flujo programático canónico](docs/programmatic-workflow.md): `DISCOVER → RETRIEVE → PLAN → GENERATE → VALIDATE → REPAIR → VERIFY`.
+
 1. Copia `START-UP.md`, `AGENTS.md`, `Skills/` y `scripts/` a tu proyecto
 2. Ejecuta: `./scripts/validate-skills.sh --dry-run`
 3. Usa tu agente con: *"Usa START-UP.md como protocolo, analiza el repo y configura AGENTS/Skills para este contexto"*
@@ -19,6 +21,10 @@ Ver [QUICKSTART.md](QUICKSTART.md) para detalles.
   - `encoded_preference`: preferencias de equipo estables (no caducan)
   - `Skills/examples/react-vite-ts/` → ejemplos concretos para stack React + Vite + TypeScript (`scope: [example]`, para adaptar, no copiar)
 - **[MIGRACION.md](MIGRACION.md)** → Plan de migración y mantenimiento
+- **[docs/repository-targeting.md](docs/repository-targeting.md)** → Protocolo canónico para identificar el repositorio correcto antes de cualquier cambio
+- **[docs/agent-skills-guide.md](docs/agent-skills-guide.md)** → Diferencia entre el formato Agent Skills y este controlador operativo
+- **[docs/programmatic-workflow.md](docs/programmatic-workflow.md)** → Contrato de siete etapas
+- **[Skills/programmatic-workflow/SKILL.md](Skills/programmatic-workflow/SKILL.md)** → Skill reusable para aplicar el flujo
 - **scripts/validate-skills.sh** → Validador automático de estructura y metadata
 
 ## ¿Por qué dos tipos de skills?

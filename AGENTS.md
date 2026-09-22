@@ -21,13 +21,16 @@ Si dos fuentes se contradicen, gana la de mayor precedencia.
 2. No inventar comandos: usar solo comandos realmente disponibles en el repo o declararlos como "pendientes de definir".
 3. Mantener cambios auditables: cada cambio debe explicar que se hizo, por que y en que archivo.
 4. Preservar coherencia: documentacion y contenido deben reflejar el estado real del repo.
+5. Antes de leer o modificar un repositorio, aplicar [`docs/repository-targeting.md`](docs/repository-targeting.md) y detenerse ante cualquier destino ambiguo.
+6. Para tareas con generación o cambios, seguir [`docs/programmatic-workflow.md`](docs/programmatic-workflow.md) y usar [`Skills/programmatic-workflow/SKILL.md`](Skills/programmatic-workflow/SKILL.md); no entregar sin validación y verificación.
 
 ## Flujo minimo para cambios de documentacion
 
 1. Leer `README.md` y `START-UP.md` para detectar reglas ya existentes.
-2. Cambiar solo lo necesario para resolver la solicitud actual.
-3. Eliminar redundancias evidentes en lugar de sumar texto nuevo.
-4. Cerrar con un resumen corto de cambios por archivo.
+2. Aplicar el preflight de [`docs/repository-targeting.md`](docs/repository-targeting.md).
+3. Cambiar solo lo necesario para resolver la solicitud actual.
+4. Eliminar redundancias evidentes en lugar de sumar texto nuevo.
+5. Cerrar con un resumen corto de cambios por archivo y checks ejecutados.
 
 ## Definition of done
 

@@ -4,6 +4,16 @@ Aplicá este framework a cualquier proyecto en minutos. Validación local + CI, 
 
 ## Antes de tocar NADA (OBLIGATORIO)
 
+### Identidad del repositorio
+
+Lee [`docs/repository-targeting.md`](docs/repository-targeting.md) y verifica:
+
+- [ ] `git rev-parse --show-toplevel` coincide con el repositorio esperado.
+- [ ] Inspeccionaste `pwd`, `git status --short --branch`, `git remote -v` y la rama actual.
+- [ ] Revisaste el `AGENTS.md` y `README.md` más cercanos.
+- [ ] Confirmaste si el cambio es del framework reusable o de una aplicación.
+- [ ] Si hay varios destinos plausibles o alguna identidad es ambigua, te detuviste para preguntar.
+
 Confirma explícitamente con tu agente:
 - **Tipo de proyecto**: web, API, mobile, desktop, librería, monorepo
 - **Arquitectura**: capas, hexagonal, clean, modular, feature-first
@@ -11,6 +21,8 @@ Confirma explícitamente con tu agente:
 ⚠️ **Si no está claro**: marca como "suposición a validar", NO cierres setup sin confirmación.
 
 ## 1. Copiar base
+
+Luego de confirmar el destino, selecciona el workflow y la skill aplicable. Para tareas con generación o cambios, usa [`docs/programmatic-workflow.md`](docs/programmatic-workflow.md) y [`Skills/programmatic-workflow/SKILL.md`](Skills/programmatic-workflow/SKILL.md): recuperar antes de generar, validar antes de entregar y verificar al final.
 
 En tu proyecto target:
 ```bash
@@ -105,3 +117,6 @@ Stack: Python + pytest + ruff + mypy
 - [README.md](README.md) - Visión general y filosofía
 - [START-UP.md](START-UP.md) - Protocolo completo paso a paso
 - [MIGRACION.md](MIGRACION.md) - Plan de evolución y mantenimiento
+- [docs/agent-skills-guide.md](docs/agent-skills-guide.md) - Formato Agent Skills y arquitectura operativa
+- [docs/programmatic-workflow.md](docs/programmatic-workflow.md) - Contrato canónico de siete etapas
+- [docs/repository-targeting.md](docs/repository-targeting.md) - Preflight de identidad del repositorio
